@@ -1,5 +1,11 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsNotEmpty, IsNumber, IsPositive, IsString, IsUrl } from 'class-validator';
+import {
+    IsNotEmpty,
+    IsNumber,
+    IsPositive,
+    IsString,
+    IsUrl,
+} from 'class-validator';
 
 export class ProductDTO {
     readonly id: number;

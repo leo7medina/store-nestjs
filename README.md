@@ -111,15 +111,16 @@ npm run start
 #  check => localhost:3000
 
 
+### Comandos usados
 
 nest g resource [name]
-nest g controller products
-nest g controller categories
 
+nest g controller products
+
+nest g controller categories
 
 nest g s services/product --flat  (para que no cree una subcarpeta)
 
 nest g pipe common/parse-int
-
 
 npm i class-validator class-transformer @nestjs/mapped-types
