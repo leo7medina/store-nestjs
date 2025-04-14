@@ -1,25 +1,55 @@
 import { Module } from '@nestjs/common';
+import { HttpModule, HttpService } from '@nestjs/axios';
+import { ConfigModule } from '@nestjs/config';
+import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProductsController } from './constrollers/products/products.controller';
-import { CategoriesController } from './constrollers/categories/categories.controller';
-import { OrdersController } from './constrollers/orders/orders.controller';
-import { UsersController } from './constrollers/users/users.controller';
-import { BrandsController } from './constrollers/brands/brands.controller';
-import { CustomerController } from './constrollers/customer/customer.controller';
-import { ProductsService } from './services/products.service';
+import { UsersModule } from './modules/users/users.module';
+import { ProductsModule } from './modules/products/products.module';
+import { OrdersModule } from './modules/orders/orders.module';
+import { DatabaseModule } from './modules/database/database.module';
+import { enviroments } from 'src/enviroments';
+import config from 'src/config';
+
+const env_node = () => {
+    let value = './config/.env';
+    if (process.env.NODE_ENV) {
+        value = enviroments[process.env.NODE_ENV];
+    }
+    return value;
+};
 
 @Module({
-    imports: [],
-    controllers: [
-        AppController,
-        ProductsController,
-        CategoriesController,
-        OrdersController,
-        UsersController,
-        BrandsController,
-        CustomerController,
+    imports: [
+        ConfigModule.forRoot({
+            envFilePath: env_node(),
+            load: [config],
+            isGlobal: true,
+            validationSchema: Joi.object({
+                API_KEY: Joi.string().required(),
+                DATABASE_NAME: Joi.string().required(),
+                DATABASE_PORT: Joi.number().required(),
+            }),
+        }),
+        HttpModule,
+        UsersModule,
+        ProductsModule,
+        OrdersModule,
+        DatabaseModule,
     ],
-    providers: [AppService, ProductsService],
+    controllers: [AppController],
+    providers: [
+        AppService,
+        {
+            provide: 'TASKS',
+            useFactory: async (http: HttpService) => {
+                const task = await http
+                    .get('https://jsonplaceholder.typicode.com/todos')
+                    .toPromise();
+                return task?.data;
+            },
+            inject: [HttpService],
+        },
+    ],
 })
 export class AppModule {}
