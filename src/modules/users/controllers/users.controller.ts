@@ -15,6 +15,11 @@ import { CreateUserDTO, UpdateUserDTO } from 'src/modules/users/dtos/user.dto';
 export class UsersController {
     constructor(private userService: UserService) {}
 
+    @Get('tasks')
+    tasks() {
+        return this.userService.getTasks();
+    }
+
     @Get()
     findAll() {
         return this.userService.findAll();
@@ -42,4 +47,6 @@ export class UsersController {
     remove(@Param('id', ParseIntPipe) id: number) {
         return this.userService.remove(id);
     }
+
+
 }

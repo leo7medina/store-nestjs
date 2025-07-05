@@ -6,11 +6,11 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
     {
-        ignores: ['eslint.config.mjs'],
+        ignores: ['eslint.config.mjs', 'src/modules/database/migrations/**'],
     },
     eslint.configs.recommended,
     ...tseslint.configs.recommendedTypeChecked,
-    eslintPluginPrettierRecommended,
+    // eslintPluginPrettierRecommended,
     {
         languageOptions: {
             globals: {
@@ -24,6 +24,7 @@ export default tseslint.config(
                 tsconfigRootDir: import.meta.dirname,
             },
         },
+        ignores: ['src/modules/database/migrations/*']
     },
     {
         rules: {

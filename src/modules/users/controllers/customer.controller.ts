@@ -14,7 +14,7 @@ import {
     UpdateCustomerDTO,
 } from 'src/modules/users/dtos/customer.dto';
 
-@Controller('customer')
+@Controller('customers')
 export class CustomerController {
     constructor(private customerService: CustomerService) {}
 

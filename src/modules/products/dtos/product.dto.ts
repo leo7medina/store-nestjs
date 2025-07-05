@@ -1,11 +1,13 @@
-import { PartialType } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import {
+    IsArray,
     IsNotEmpty,
-    IsNumber,
+    IsNumber, IsOptional,
     IsPositive,
     IsString,
-    IsUrl,
+    IsUrl, MaxLength, Min, ValidateIf,
 } from 'class-validator';
+import { AppConstants } from 'src/common/constants/app.constants';
 
 export class ProductDTO {
     readonly id: number;
@@ -18,37 +20,58 @@ export class ProductDTO {
 export class CreateProductDTO {
     @IsString()
     @IsNotEmpty()
+    @MaxLength(AppConstants.MAX_LENGTH.PRODUCT.NAME)
+    @ApiProperty({ description: 'Name of the product'})
     readonly name: string;
+
     @IsString()
     @IsNotEmpty()
+    @ApiProperty()
     readonly description: string;
+
     @IsNumber()
     @IsPositive()
+    @ApiProperty()
     readonly price: number;
+
     @IsNumber()
     @IsPositive()
+    @ApiProperty()
     readonly stock: number;
+
     @IsString()
     @IsUrl()
+    @ApiProperty()
     readonly image: string;
+
+    @IsNumber()
+    @IsPositive()
+    @IsNotEmpty()
+    @ApiProperty()
+    readonly brandId: number;
+
+    @IsArray()
+    @IsNotEmpty()
+    @ApiProperty()
+    readonly categoriesIds: number[];
 }
 
-// export class UpdateProductDTO {
-//     @IsString()
-//     @IsNotEmpty()
-//     readonly name?: string;
-//     @IsString()
-//     @IsNotEmpty()
-//     readonly description?: string;
-//     @IsNumber()
-//     @IsPositive()
-//     readonly price?: number;
-//     @IsNumber()
-//     @IsPositive()
-//     readonly stock?: number;
-//     @IsString()
-//     @IsUrl()
-//     readonly image?: string;
-// }
-
 export class UpdateProductDTO extends PartialType(CreateProductDTO) {}
+
+export class FilterProductsDTO {
+    @IsOptional()
+    @IsPositive()
+    limit: number;
+
+    @IsOptional()
+    @Min(0)
+    offset: number;
+
+    @IsOptional()
+    @IsPositive()
+    minPrice: number;
+
+    @ValidateIf( (item) => item.minPrice)
+    @IsPositive()
+    maxPrice: number;
+}

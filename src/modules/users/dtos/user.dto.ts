@@ -1,11 +1,13 @@
-import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsPositive, IsString, Length, MaxLength } from 'class-validator';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { RoleEnum } from 'src/modules/users/enums/role.enum';
+import { AppConstants } from 'src/common/constants/app.constants';
 
 export class UserDTO {
-    id: number;
-    email: string;
-    password: string;
-    role: string;
+    readonly id: number;
+    readonly email: string;
+    readonly password: string;
+    readonly role: string;
 }
 
 export class CreateUserDTO {
@@ -20,10 +22,22 @@ export class CreateUserDTO {
     @IsString()
     @IsNotEmpty()
     @Length(6)
+    @ApiProperty()
     readonly password: string;
 
     @IsNotEmpty()
-    readonly role: string;
+    @MaxLength(AppConstants.MAX_LENGTH.USER.USERNAME)
+    @ApiProperty()
+    readonly username: string;
+
+    @IsNotEmpty()
+    @ApiProperty()
+    readonly role: RoleEnum;
+
+    @IsOptional()
+    @IsPositive()
+    @ApiProperty()
+    readonly customerId: number;
 }
 
 export class UpdateUserDTO extends PartialType(CreateUserDTO) {}

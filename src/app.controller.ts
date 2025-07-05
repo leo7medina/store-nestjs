@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller('base')
@@ -11,7 +11,17 @@ export class AppController {
     }
 
     @Get('find/:id')
-    findOne(@Param('id') id: any) {
+    findOne(@Param('id', ParseIntPipe) id: any) {
         return `The ${id}`;
     }
+    @Get('tasks')
+    tasks() {
+        return this.appService.getTasks();
+    }
+
+    @Get('tasksApi')
+    tasksApi() {
+        return this.appService.getTasksApi();
+    }
+
 }

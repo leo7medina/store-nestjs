@@ -6,17 +6,25 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { ProductsModule } from './modules/products/products.module';
-import { OrdersModule } from './modules/orders/orders.module';
 import { DatabaseModule } from './modules/database/database.module';
 import { enviroments } from 'src/enviroments';
 import config from 'src/config';
+import { TaskVO } from 'src/vo/TaskVO';
+import { lastValueFrom } from 'rxjs';
+import { AppConstants } from 'src/common/constants/app.constants';
+import * as process from 'node:process';
 
 const env_node = () => {
-    let value = './config/.env';
-    if (process.env.NODE_ENV) {
-        value = enviroments[process.env.NODE_ENV];
+    const env = process.env.NODE_ENV;
+    if (env && Object.prototype.hasOwnProperty.call(enviroments, env)) {
+        return enviroments[env as keyof typeof enviroments];
     }
-    return value;
+    return './config/.env';
+    // let value = './config/.env';
+    // if (process.env.NODE_ENV) {
+    //     value = enviroments[process.env.NODE_ENV];
+    // }
+    // return value;
 };
 
 @Module({
@@ -34,18 +42,17 @@ const env_node = () => {
         HttpModule,
         UsersModule,
         ProductsModule,
-        OrdersModule,
         DatabaseModule,
     ],
     controllers: [AppController],
     providers: [
         AppService,
         {
-            provide: 'TASKS',
+            provide: AppConstants.TASKS,
             useFactory: async (http: HttpService) => {
-                const task = await http
-                    .get('https://jsonplaceholder.typicode.com/todos')
-                    .toPromise();
+                const task = await lastValueFrom(
+                    http.get<TaskVO[]>(AppConstants.URLS.TODOS)
+                );
                 return task?.data;
             },
             inject: [HttpService],

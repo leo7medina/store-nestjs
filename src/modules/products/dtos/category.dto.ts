@@ -1,14 +1,17 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-import { PartialType } from '@nestjs/swagger';
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { AppConstants } from 'src/common/constants/app.constants';
 
 export class CategoryDTO {
-    id: number;
-    name: string;
+    readonly id: number;
+    readonly name: string;
 }
 
 export class CreateCategoryDTO {
     @IsString()
     @IsNotEmpty()
+    @ApiProperty()
+    @MaxLength(AppConstants.MAX_LENGTH.CATEGORY.NAME)
     readonly name: string;
 }
 

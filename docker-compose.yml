@@ -1,0 +1,55 @@
+version: '3.3'
+services:
+    postgres:
+        image: postgres:latest
+        environment:
+            - POSTGRES_DB=store_nestjs
+            - POSTGRES_USER=user_store_nestjs
+            - POSTGRES_PASSWORD=admin_store_nestjs
+        ports:
+            - '5432:5432'
+        networks:
+            - leo-dev-network   
+        volumes:
+            - ./postgres_data:/var/lib/postgresql/data
+
+    pgadmin:
+        image: dpage/pgadmin4
+        environment:
+            - PGADMIN_DEFAULT_EMAIL=root@admin.com
+            - PGADMIN_DEFAULT_PASSWORD=root
+        ports:
+            - "5050:80"
+        networks:
+            - leo-dev-network
+        depends_on:
+            - postgres
+
+    mysql:
+        image: mysql:9.3.0
+        environment:
+            - MYSQL_DATABASE=store_nestjs
+            - MYSQL_ROOT_PASSWORD=123456
+            - MYSQL_USER=user_store_nestjs
+            - MYSQL_PASSWORD=admin_store_nestjs
+        ports:
+            - '3306:3306'
+        networks:
+            - leo-dev-network
+        volumes:
+            - ./mysql_data:/var/lib/mysql
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        environment:
+            - PMA_HOST=mysql
+            - MYSQL_ROOT_PASSWORD=123456
+        ports:
+            - '8282:80'
+        networks:
+            - leo-dev-network
+        depends_on:
+            - mysql
+networks:
+    leo-dev-network:
+        driver: bridge
