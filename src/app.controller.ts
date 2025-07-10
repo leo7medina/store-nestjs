@@ -1,10 +1,14 @@
-import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { AppService } from './app.service';
+import { ApiKeyGuard } from 'src/modules/auth/guards/api-key.guard';
+import { Public } from 'src/modules/auth/decorators/public.decorator';
 
+@UseGuards(ApiKeyGuard)
 @Controller('base')
 export class AppController {
     constructor(private readonly appService: AppService) {}
 
+    @Public()
     @Get()
     getHello(): string {
         return this.appService.getHello();
@@ -19,6 +23,7 @@ export class AppController {
         return this.appService.getTasks();
     }
 
+    @Public()
     @Get('tasksApi')
     tasksApi() {
         return this.appService.getTasksApi();

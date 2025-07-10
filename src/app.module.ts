@@ -12,6 +12,7 @@ import config from 'src/config';
 import { TaskVO } from 'src/vo/TaskVO';
 import { lastValueFrom } from 'rxjs';
 import { AppConstants } from 'src/common/constants/app.constants';
+import { AuthModule } from 'src/modules/auth/auth.module';
 import * as process from 'node:process';
 
 const env_node = () => {
@@ -43,6 +44,7 @@ const env_node = () => {
         UsersModule,
         ProductsModule,
         DatabaseModule,
+        AuthModule,
     ],
     controllers: [AppController],
     providers: [

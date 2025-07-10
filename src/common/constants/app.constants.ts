@@ -31,5 +31,7 @@ export class AppConstants {
             USERNAME: 20,
             PASSWORD: 50
         }
-    }
+    };
+
+    static readonly IS_PUBLIC = 'isPublic';
 }
