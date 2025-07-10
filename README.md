@@ -112,10 +112,13 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 - nest g resource [name]
 - nest g controller products
 - nest g controller categories
+- nest g module auth
 - nest g s services/product --flat --no-spec
   - --flat (para que no cree una subcarpeta)
   - --no-spec (para no crear el archivo de test)
 - nest g pipe common/parse-int
+- nest g gu modules/auth/guards/api-key
+- nest g d modules/auth/decorators/public --flat
 
 ### Instalacion dependencias
 - npm i class-validator class-transformer @nestjs/mapped-types
