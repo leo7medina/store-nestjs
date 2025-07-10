@@ -119,6 +119,8 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 - nest g pipe common/parse-int
 - nest g gu modules/auth/guards/api-key
 - nest g d modules/auth/decorators/public --flat
+- nest g service modules/auth/services/auth --flat --no-spec
+- nest g co modules/auth/controller/auth --flat
 
 ### Instalacion dependencias
 - npm i class-validator class-transformer @nestjs/mapped-types
@@ -130,6 +132,8 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 - npm i @nestjs/mongoose mongoose
 - npm i bcrypt
 - npm i @types/bcrypt -D
+- npm install --save @nestjs/passport passport passport-local
+- npm install --save-dev @types/passport-local
 
 
 

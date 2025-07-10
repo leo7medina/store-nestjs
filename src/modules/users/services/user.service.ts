@@ -42,7 +42,11 @@ export class UserService {
         return this.userModel.findByIdAndDelete(id);
     }
 
-    findByEmail(email: string) {
-        return this.userModel.findOne({ email}).exec();
+    async findByEmail(email: string) {
+        const user = await this.userModel.findOne({ email}).exec();
+        if (!user) {
+            throw new NotFoundException(`User with email: ${email} not found.`);
+        }
+        return user;
     }
 }
