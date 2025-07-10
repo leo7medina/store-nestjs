@@ -126,6 +126,8 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 - npm i @types/pg
 - npm i --save @nestjs/typeorm typeorm
 - npm i mysql2
+- npm i bcrypt
+- npm i @types/bcrypt -D
 
 ### Migraciones
 

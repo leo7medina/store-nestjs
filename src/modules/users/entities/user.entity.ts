@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'ty
 import { RoleEnum } from 'src/modules/users/enums/role.enum';
 import { Customer } from 'src/modules/users/entities/customer.entity';
 import { AppConstants } from 'src/common/constants/app.constants';
+import { Exclude } from 'class-transformer';
 
 @Entity({name: 'users'})
 export class User {
@@ -14,6 +15,7 @@ export class User {
     @Column({type: 'varchar', length: AppConstants.MAX_LENGTH.USER.USERNAME, unique: true})
     username: string;
 
+    @Exclude()
     @Column({ type: 'varchar', length: AppConstants.MAX_LENGTH.USER.PASSWORD })
     password: string; //encript
 
