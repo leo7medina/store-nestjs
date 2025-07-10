@@ -29,7 +29,7 @@ export class AppConstants {
         USER: {
             EMAIL: 100,
             USERNAME: 20,
-            PASSWORD: 50
+            PASSWORD: 255
         }
     };
 

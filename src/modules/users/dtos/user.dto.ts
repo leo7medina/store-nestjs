@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsPositive, IsString, Length, MaxLength } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPositive, IsString, Length, MaxLength } from 'class-validator';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { RoleEnum } from 'src/modules/users/enums/role.enum';
 import { AppConstants } from 'src/common/constants/app.constants';
@@ -32,6 +32,7 @@ export class CreateUserDTO {
 
     @IsNotEmpty()
     @ApiProperty()
+    @IsEnum(RoleEnum, { message: 'El rol debe ser: [CUSTOMER, ADMIN, PRODUCT_MANAGER, ORDER_MANAGER, SUPPORT, MARKETING, LOGISTICS]'})
     readonly role: RoleEnum;
 
     @IsOptional()
