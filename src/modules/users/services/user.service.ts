@@ -1,25 +1,22 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from 'src/modules/users/entities/user.entity';
 import { CreateUserDTO, UpdateUserDTO } from 'src/modules/users/dtos/user.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class UserService {
-    private counterId = 1;
-    private users: User[] = [
-        {
-            id: 1,
-            email: 'correo@gmail.com',
-            password: '12345',
-            role: 'admin',
-        },
-    ];
+
+    constructor(
+        @InjectModel(User.name) private userModel: Model<User>
+    ) {}
 
     findAll() {
-        return this.users;
+        return this.userModel.find().exec();
     }
 
-    findOne(id: number) {
-        const user = this.users.find((item) => item.id === id);
+    async findOne(id: string) {
+        const user = await this.userModel.findById(id);
         if (!user) {
             throw new NotFoundException(`User #${id} not found.`);
         }
@@ -27,34 +24,17 @@ export class UserService {
     }
 
     create(payload: CreateUserDTO) {
-        this.counterId += 1;
-        const newUser: User = {
-            id: this.counterId,
-            ...payload,
-        };
-        this.users.push(newUser);
-        return newUser;
+       const newUser = new this.userModel(payload);
+       return newUser.save();
     }
 
-    update(id: number, payload: UpdateUserDTO) {
-        const user = this.findOne(id);
-        if (user) {
-            const index = this.users.findIndex((item) => item.id === id);
-            this.users[index] = {
-                ...user,
-                ...payload,
-            };
-            return this.users[index];
-        }
-        return null;
+    update(id: string, payload: UpdateUserDTO) {
+        return this.userModel
+            .findByIdAndUpdate(id, { $set: payload }, { new: true })
+            .exec();
     }
 
-    remove(id: number) {
-        const index = this.users.findIndex((item) => item.id === id);
-        if (index === -1) {
-            throw new NotFoundException(`User #${id} not found.`);
-        }
-        this.users.splice(index, 1);
-        return true;
+    remove(id: string) {
+        return this.userModel.findByIdAndDelete(id);
     }
 }

@@ -4,23 +4,22 @@ import {
     CreateCategoryDTO,
     UpdateCategoryDTO,
 } from 'src/modules/products/dtos/category.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class CategoryService {
-    private counterId = 1;
-    private categories: Category[] = [
-        {
-            id: 1,
-            name: 'Category 1',
-        },
-    ];
+
+    constructor(
+       @InjectModel(Category.name) private categoryModel: Model<Category>
+    ) {}
 
     findAll() {
-        return this.categories;
+        return this.categoryModel.find().exec();
     }
 
-    findOne(id: number) {
-        const category = this.categories.find((item) => item.id === id);
+    async findOne(id: string) {
+        const category = await this.categoryModel.findOne({_id: id}).exec();
         if (!category) {
             throw new NotFoundException(`Category #${id} not found.`);
         }
@@ -28,34 +27,19 @@ export class CategoryService {
     }
 
     create(payload: CreateCategoryDTO) {
-        this.counterId += 1;
-        const newCategory: Category = {
-            id: this.counterId,
-            ...payload,
-        };
-        this.categories.push(newCategory);
-        return newCategory;
+        const newCategory = new this.categoryModel(payload);
+        return newCategory.save();
     }
 
-    update(id: number, payload: UpdateCategoryDTO) {
-        const category = this.findOne(id);
-        if (category) {
-            const index = this.categories.findIndex((item) => item.id === id);
-            this.categories[index] = {
-                ...category,
-                ...payload,
-            };
-            return this.categories[index];
-        }
-        return null;
-    }
-
-    remove(id: number) {
-        const index = this.categories.findIndex((item) => item.id === id);
-        if (index === -1) {
+    async update(id: string, payload: UpdateCategoryDTO) {
+        const category = await this.categoryModel.findByIdAndUpdate(id, { $set: payload}, { new: true}).exec();
+        if (!category) {
             throw new NotFoundException(`Category #${id} not found.`);
         }
-        this.categories.splice(index, 1);
-        return true;
+        return category;
+    }
+
+    remove(id: string) {
+       return this.categoryModel.findByIdAndDelete(id);
     }
 }

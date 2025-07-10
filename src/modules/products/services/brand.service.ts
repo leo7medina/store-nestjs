@@ -4,59 +4,46 @@ import {
     CreateBrandDTO,
     UpdateBrandDTO,
 } from 'src/modules/products/dtos/brand.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class BrandService {
-    private counterId = 1;
-    private brands: Brand[] = [
-        {
-            id: 1,
-            name: 'Brand 1',
-            image: 'assets/images/brands/brand-1.png',
-        },
-    ];
+
+    constructor(
+       @InjectModel(Brand.name) private brandModel: Model<Brand>
+    ) {}
 
     findAll() {
-        return this.brands;
+        return this.brandModel.find().exec();
     }
 
-    findOne(id: number) {
-        const brand = this.brands.find((item) => item.id === id);
+    async findOne(id: string) {
+        const brand = await this.brandModel.findOne({ _id: id }).exec();
         if (!brand) {
-            throw new NotFoundException(`Brand #${id} not found.`);
+            throw new NotFoundException(`Brand #${id} not found`);
         }
         return brand;
     }
 
     create(payload: CreateBrandDTO) {
-        this.counterId += 1;
-        const newBrand: Brand = {
-            id: this.counterId,
-            ...payload,
-        };
-        this.brands.push(newBrand);
-        return newBrand;
+        console.log('payload brand', payload);
+        const newBrand = new this.brandModel(payload);
+        console.log('newBrand', newBrand);
+        return newBrand.save();
     }
 
-    update(id: number, payload: UpdateBrandDTO) {
-        const brand = this.findOne(id);
-        if (brand) {
-            const index = this.brands.findIndex((item) => item.id === id);
-            this.brands[index] = {
-                ...brand,
-                ...payload,
-            };
-            return this.brands[index];
+    async update(id: string, payload: UpdateBrandDTO) {
+        const brand = await this.brandModel
+            .findByIdAndUpdate(id, { $set: payload}, { new: true})
+            .exec();
+        if (!brand) {
+            throw new NotFoundException(`Brand #${id} not found`);
         }
-        return null;
+        return brand;
     }
 
-    remove(id: number) {
-        const index = this.brands.findIndex((item) => item.id === id);
-        if (index === -1) {
-            throw new NotFoundException(`Brand #${id} not found.`);
-        }
-        this.brands.splice(index, 1);
-        return true;
+    remove(id: string) {
+        return this.brandModel.findByIdAndDelete(id);
     }
 }

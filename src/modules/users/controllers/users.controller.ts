@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from 'src/modules/users/services/user.service';
 import { CreateUserDTO, UpdateUserDTO } from 'src/modules/users/dtos/user.dto';
+import { MongoIdPipe } from 'src/commons/pipes/mongo-id.pipe';
 
 @Controller('users')
 export class UsersController {
@@ -21,7 +22,7 @@ export class UsersController {
     }
 
     @Get(':id')
-    get(@Param('id', ParseIntPipe) id: number) {
+    get(@Param('id', MongoIdPipe) id: string) {
         return this.userService.findOne(id);
     }
 
@@ -32,14 +33,14 @@ export class UsersController {
 
     @Put(':id')
     update(
-        @Param('id', ParseIntPipe) id: number,
+        @Param('id', MongoIdPipe) id: string,
         @Body() payload: UpdateUserDTO,
     ) {
         return this.userService.update(id, payload);
     }
 
     @Delete(':id')
-    remove(@Param('id', ParseIntPipe) id: number) {
+    remove(@Param('id', MongoIdPipe) id: string) {
         return this.userService.remove(id);
     }
 }

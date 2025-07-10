@@ -124,3 +124,10 @@ nest g s services/product --flat  (para que no cree una subcarpeta)
 nest g pipe common/parse-int
 
 npm i class-validator class-transformer @nestjs/mapped-types
+
+
+npm i mongodb
+
+npm i @types/mongodb -D
+
+npm i @nestjs/mongoose mongoose

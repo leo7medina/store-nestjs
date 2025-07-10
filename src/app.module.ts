@@ -6,7 +6,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { ProductsModule } from './modules/products/products.module';
-import { OrdersModule } from './modules/orders/orders.module';
 import { DatabaseModule } from './modules/database/database.module';
 import { enviroments } from 'src/enviroments';
 import config from 'src/config';
@@ -34,7 +33,6 @@ const env_node = () => {
         HttpModule,
         UsersModule,
         ProductsModule,
-        OrdersModule,
         DatabaseModule,
     ],
     controllers: [AppController],

@@ -14,4 +14,9 @@ export class AppController {
     findOne(@Param('id') id: any) {
         return `The ${id}`;
     }
+
+    @Get('/tasksmongo')
+    getTasksMongoDB() {
+        return this.appService.getTasksMongoDB();
+    }
 }
