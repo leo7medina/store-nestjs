@@ -99,35 +99,41 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
 
 
-Apuntes:
-node --version
-npm i -g @nestjs/cli
-nest --version
-nest --help
+## Apuntes
+- link swagger: http://localhost:3000/docs#/
+### Comandos:
+- node --version
+- npm i -g @nestjs/cli
+- nest --version
+- nest --help
+- nest new your-name-project
+  - cd your-name-project
+  - npm run start (check => localhost:3000)
+- nest g resource [name]
+- nest g controller products
+- nest g controller categories
+- nest g module auth
+- nest g s services/product --flat --no-spec
+  - --flat (para que no cree una subcarpeta)
+  - --no-spec (para no crear el archivo de test)
+- nest g pipe common/parse-int
+- nest g gu modules/auth/guards/api-key
+- nest g d modules/auth/decorators/public --flat
 
-nest new your-name-project
-cd your-name-project
-npm run start
-#  check => localhost:3000
+### Instalacion dependencias
+- npm i class-validator class-transformer @nestjs/mapped-types
+- npm i pg
+- npm i @types/pg
+- npm i --save @nestjs/typeorm typeorm
+- npm i mongodb
+- npm i @types/mongodb -D
+- npm i @nestjs/mongoose mongoose
+- npm i bcrypt
+- npm i @types/bcrypt -D
 
 
-### Comandos usados
-
-nest g resource [name]
-
-nest g controller products
-
-nest g controller categories
-
-nest g s services/product --flat  (para que no cree una subcarpeta)
-
-nest g pipe common/parse-int
-
-npm i class-validator class-transformer @nestjs/mapped-types
 
 
-npm i mongodb
 
-npm i @types/mongodb -D
 
-npm i @nestjs/mongoose mongoose
+

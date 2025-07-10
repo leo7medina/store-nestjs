@@ -3,6 +3,7 @@ import { User } from 'src/modules/users/entities/user.entity';
 import { CreateUserDTO, UpdateUserDTO } from 'src/modules/users/dtos/user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -23,9 +24,12 @@ export class UserService {
         return user;
     }
 
-    create(payload: CreateUserDTO) {
+    async create(payload: CreateUserDTO) {
        const newUser = new this.userModel(payload);
-       return newUser.save();
+       newUser.password = await bcrypt.hash(newUser.password, 10);
+       const model = await newUser.save();
+       const { password, ...rta } = model.toJSON();
+       return rta;
     }
 
     update(id: string, payload: UpdateUserDTO) {
@@ -36,5 +40,9 @@ export class UserService {
 
     remove(id: string) {
         return this.userModel.findByIdAndDelete(id);
+    }
+
+    findByEmail(email: string) {
+        return this.userModel.findOne({ email}).exec();
     }
 }
