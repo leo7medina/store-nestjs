@@ -119,6 +119,9 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 - nest g pipe common/parse-int
 - nest g gu modules/auth/guards/api-key
 - nest g d modules/auth/decorators/public --flat
+- nest g d modules/auth/decorators/roles --flat
+- nest g gu modules/auth/guards/roles --flat
+- nest g gu modules/auth/guards/jwt-auth --flat
 
 ### Instalacion dependencias
 - npm i class-validator class-transformer @nestjs/mapped-types
@@ -128,6 +131,10 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 - npm i mysql2
 - npm i bcrypt
 - npm i @types/bcrypt -D
+- npm install --save @nestjs/passport passport passport-local
+- npm install --save-dev @types/passport-local
+- npm install --save @nestjs/jwt passport-jwt
+- npm install --save-dev @types/passport-jwt
 
 ### Migraciones
 

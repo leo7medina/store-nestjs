@@ -1,4 +1,5 @@
 import { registerAs } from '@nestjs/config';
+import * as process from 'node:process';
 
 export default registerAs('config', () => {
     return {
@@ -21,5 +22,6 @@ export default registerAs('config', () => {
             host: process.env.MYSQL_HOST,
         },
         apiKey: process.env.API_KEY,
+        jwtSecret: process.env.JWT_SECRET
     };
 });

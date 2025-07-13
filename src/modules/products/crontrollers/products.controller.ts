@@ -10,7 +10,7 @@ import {
     HttpCode,
     HttpStatus,
     Res,
-    ParseIntPipe,
+    ParseIntPipe, UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ParseIntLPipe } from 'src/common/parse-int-l/parse-int-l.pipe';
@@ -26,18 +26,26 @@ import {
     ApiTags,
 } from '@nestjs/swagger';
 import { Product } from 'src/modules/products/entities/product.entity';
+import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-auth.guard';
+import { Public } from 'src/modules/auth/decorators/public.decorator';
+import { Roles } from 'src/modules/auth/decorators/roles.decorator';
+import { RoleEnum } from 'src/modules/users/enums/role.enum';
+import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags('Products')
 @Controller('products')
 export class ProductsController {
     constructor(private productsService: ProductsService) {}
 
+    @Public()
     @Get('/:productId')
     @HttpCode(HttpStatus.ACCEPTED)
     getProduct(@Param('productId', ParseIntPipe) productId: number) {
         return this.productsService.findOne(productId);
     }
 
+    @Public()
     @ApiOperation({ summary: 'List of products.'})
     @Get('')
     getProducts(@Query() params: FilterProductsDTO) {
@@ -50,6 +58,7 @@ export class ProductsController {
         type: Product,
     })
     @ApiForbiddenResponse({ description: 'Forbidden.' })
+    @Roles(RoleEnum.ADMIN)
     @Post()
     create(@Body() payload: CreateProductDTO) {
         return this.productsService.create(payload);
