@@ -34,4 +34,5 @@ export class AppConstants {
     };
 
     static readonly IS_PUBLIC = 'isPublic';
+    static readonly ROLES_KEY = 'roles';
 }
